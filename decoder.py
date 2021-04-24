@@ -10,7 +10,7 @@ def check_replication(list_chroms,v):
     for i,chrom in enumerate(list_chroms):
         dist[i] = get_ave_distance(chrom)
     # PLAY WITH THRESHOLD
-    threshold = max(dist)*0.07
+    threshold = max(dist)*0.1
     if v:
         print('subgenome_1 average distance between transposons',dist[0])
         print('subgenome_2 average distance between transposons',dist[1])
