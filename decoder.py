@@ -10,7 +10,7 @@ def check_replication(list_chroms,v):
     for i,chrom in enumerate(list_chroms):
         dist[i] = get_ave_distance(chrom)
     # PLAY WITH THRESHOLD
-    threshold = max(dist)*0.1
+    threshold = max(dist)*0.15
     if v:
         print('subgenome_1 average distance between transposons',dist[0])
         print('subgenome_2 average distance between transposons',dist[1])
@@ -29,7 +29,7 @@ def get_transposons_in_common(chrom1,chrom2,r):
             transposons_in_common.append(transposon)
     return len(transposons_in_common)
 
-def find_most_ancestral(list_chroms,v,r):
+def find_order(list_chroms,v,r):
     common_t1_2 = get_transposons_in_common(np.array(list_chroms[0]),np.array(list_chroms[1]),r)
     common_t1_3 = get_transposons_in_common(np.array(list_chroms[0]),np.array(list_chroms[2]),r)
     common_t2_3 = get_transposons_in_common(np.array(list_chroms[1]),np.array(list_chroms[2]),r)
@@ -38,14 +38,18 @@ def find_most_ancestral(list_chroms,v,r):
     ave_2 = (common_t1_2+common_t2_3)/2
     ave_3 = (common_t2_3+common_t1_3)/2
     
-    max_c = max(ave_1,ave_2,ave_3)
-    if max_c == ave_1:
-        print('Subgenome 1 is the most ancestral')
+    min_c = min(ave_1,ave_2,ave_3)
+    if v:
+        print('average transposons in common for subgenome_1 = ',ave_1)
+        print('average transposons in common for subgenome_2 = ',ave_2)
+        print('average transposons in common for subgenome_3 = ',ave_3)
+    if min_c == ave_3:
+        print('Subgenome 3 was present before subgenomes 1 and 2')
         most_ancestral = list_chroms[0]
-    elif max_c == ave_2:
-        print('Subgenome 2 is the most ancestral')
+    elif min_c == ave_2:
+        print('Subgenome 2 was present before subgenomes 1 and 3')
         most_ancestral = list_chroms[1]
     else:
-        print('Subgenome 3 is the most ancestral')
+        print('Subgenome 1 was present before subgenomes 2 and 3')
         most_ancestral = list_chroms[2]
 #     return most_ancestral, max(common_t1_2,common_t1_3,common_t2_3)
